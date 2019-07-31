@@ -59,7 +59,7 @@ public class DbHandler {
     }
 
     public ArrayList<String> returnOveralLTaggsFreomTable(String table) {
-        //String sql = "SELECT postId, tags, filenames, date FROM latex WHERE tags LIKE '%latex%';";
+        //String sql = "SELECT postId, tags, filenames, date FROM latex WHERE tags LIKE '%cats%';";
         String sql = "SELECT tags FROM " + table + ";";
 
 
