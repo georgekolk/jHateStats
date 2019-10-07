@@ -1,15 +1,42 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args)throws SQLException {
+    public static void main(String[] args)throws SQLException, IOException {
+
+        DbHandler dbHandler = DbHandler.getInstance("jdbc:sqlite:E:/myfin.db");
+        ArrayList<String> tagsList = new ArrayList<String>();
+
+        //это для сборки тегов из БД по таблице----------------------------------
+        //tagsList = dbHandler.returnOveralLTaggsFreomTable("deer");
+        //tagsList.addAll(dbHandler.returnOveralLTaggsFreomTable("deervideo"));
+        //-----------------------------------------------------------------------
 
 
-        DbHandler dbHandler = DbHandler.getInstance("jdbc:sqlite:D:/myfin.db");
-        ArrayList<String> tagsList = dbHandler.returnOveralLTaggsFreomTable("deer");
+        //это для сборки тегов из БД по файлам и таблице--------------------------
+
+
+
+        File dirToProcess = new File("E:\\explore\\tags\\dogvideo\\600\\");
+        FileWriter nFile = new FileWriter("E:\\tempTAGstats" + "\\" + "OMFGdogvideo600");
+        FileWriter nFileToDelete = new FileWriter("E:\\tempTAGstats" + "\\" + "OMFGdogvideo600delete.bat");
+
+        for (File fileName: dirToProcess.listFiles()){
+            tagsList.add(dbHandler.getTagsByFilename(fileName.getName(), "dogvideo"));
+            nFile.write("file '"+fileName.getCanonicalPath()+"'\n");
+            nFileToDelete.write("DEL " + fileName.getCanonicalPath()+"\n"); //нужно чтобы грохнуть это из обработанной папки
+        }
+        nFile.close();
+        nFileToDelete.close();
+        //-----------------------------------------------------------------------
+
+
+
         Map<String, Integer> states = new HashMap<String, Integer>();
-
 
         for (String tags: tagsList) {
             String[] words = tags.split("\\s+");
@@ -62,8 +89,8 @@ public class Main {
 
     public static <K, V> void printMap(Map<K, V> map) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            System.out.println("Key : " + entry.getKey()
-                    + " Value : " + entry.getValue());
+            //System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+            System.out.println(entry.getKey() + ",");
         }
     }
 
