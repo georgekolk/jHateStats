@@ -79,5 +79,25 @@ public class DbHandler {
         return tags;
     }
 
+    public String getTagsByFilename(String filename, String table) {
+        String sql = "SELECT tags FROM " + table + " WHERE filenames LIKE '%" + filename + "%';";
+        String returnPlzThis = "";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+
+                System.out.println(filename + " " + rs.getString("tags"));
+                returnPlzThis = rs.getString("tags");
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return returnPlzThis;
+    }
+
 
 }
